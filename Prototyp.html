@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8" />
+    <title>Phaser - Making your first game, part 9</title>
+        <script type="text/javascript" src="js/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+var game = new Phaser.Game(1920, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, shootBullet:
+shootBullet });
+
+
+
+var GameState = function(game) {
+};
+
+
+function preload() {
+     game.load.image('cannon', 'assets/cannon.png');
+     game.load.image('platform', 'assets/platform.png');
+     game.load.image('star', 'assets/star.png');
+
+
+}
+
+
+function create() {
+
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    game.world.setBounds(0, 0, 1920, 1920);
+
+    this.game.stage.backgroundColor = 0x4488cc;
+
+    this.GRAVITY = 500; // pixels/second/second
+    game.physics.arcade.gravity.y = this.GRAVITY;
+
+    this.gun = this.game.add.sprite(50, this.game.height - 64, 'cannon');
+    this.gun.anchor.setTo(0.5, 0.5);
+
+
+    groundBlock = this.game.add.sprite(0, this.game.height - 32, 'platform');
+    groundBlock.scale.setTo(this.game.width, 2);
+    this.game.physics.enable(groundBlock, Phaser.Physics.ARCADE);
+
+    groundBlock.body.immovable = true;
+    groundBlock.body.allowGravity = false;
+    game.physics.arcade.enable(groundBlock);
+
+
+    bullet = this.game.add.sprite(0.5, 0.5, 'star');
+    this.BULLET_SPEED = 800;
+    this.NUMBER_OF_BULLETS = 1;
+    bullet.anchor.setTo(0.5, 0.5);
+    this.game.physics.enable(bullet, Phaser.Physics.ARCADE);
+    bullet.body.collideWorldBounds = true;
+    bullet.body.bounce.setTo(1, 1);
+    bullet.kill();
+    //game.camera.follow(bullet);
+
+}
+
+
+function shootBullet() {
+
+    bullet.checkWorldBounds = true;
+    bullet.outOfBoundsKill = false;
+
+
+    bullet.reset(this.gun.x, this.gun.y);
+    bullet.rotation = this.gun.rotation;
+
+
+    bullet.body.velocity.x = Math.cos(bullet.rotation) * this.BULLET_SPEED;
+    bullet.body.velocity.y = Math.sin(bullet.rotation) * this.BULLET_SPEED;
+}
+
+
+function update() {
+
+    game.physics.arcade.collide(bullet, groundBlock);
+
+    this.gun.rotation = this.game.physics.arcade.angleToPointer(this.gun);
+
+    if (this.game.input.activePointer.isDown) {
+        this.shootBullet();
+    }
+}
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
