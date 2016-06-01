@@ -65,14 +65,14 @@ function create() {
     bullet.body.collideWorldBounds = true;
     bullet.body.bounce.setTo(1, 1);
     bullet.kill();
-    //game.camera.follow(bullet, Phaser.Camera.FOLLOW_TOPDOWN);
+
 
 }
 
 
 function shootBullet() {
-
-    bullet.checkWorldBounds = true;
+    //game.camera.follow(bullet);
+    bullet.checkWorldBounds = false;
     bullet.outOfBoundsKill = false;
 
 
@@ -80,8 +80,7 @@ function shootBullet() {
     bullet.rotation = this.gun.rotation;
 
 
-    bullet.body.velocity.x = Math.cos(bullet.rotation) * this.BULLET_SPEED;
-    bullet.body.velocity.y = Math.sin(bullet.rotation) * this.BULLET_SPEED;
+    game.physics.arcade.moveToPointer(bullet, 800);
 }
 
 
