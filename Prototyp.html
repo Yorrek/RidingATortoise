@@ -14,7 +14,7 @@
 
 <script type="text/javascript">
 
-var game = new Phaser.Game(1920, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, shootBullet:
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, shootBullet:
 shootBullet });
 
 
@@ -24,6 +24,7 @@ var GameState = function(game) {
 
 
 function preload() {
+     game.load.image('background', 'assets/szenen/bg_desert.png');
      game.load.image('cannon', 'assets/cannon.png');
      game.load.image('platform', 'assets/platform.png');
      game.load.image('star', 'assets/star.png');
@@ -38,16 +39,16 @@ function create() {
 
     game.world.setBounds(0, 0, 1920, 1920);
 
-    this.game.stage.backgroundColor = 0x4488cc;
+    bg = game.add.tileSprite(0, 0, 1920, 1920, 'background');
 
     this.GRAVITY = 500; // pixels/second/second
     game.physics.arcade.gravity.y = this.GRAVITY;
 
-    this.gun = this.game.add.sprite(50, this.game.height - 64, 'cannon');
+    this.gun = this.game.add.sprite(50, this.game.height - 100, 'cannon');
     this.gun.anchor.setTo(0.5, 0.5);
 
 
-    groundBlock = this.game.add.sprite(0, this.game.height - 32, 'platform');
+    groundBlock = this.game.add.sprite(0, this.game.height - 64, 'platform');
     groundBlock.scale.setTo(this.game.width, 2);
     this.game.physics.enable(groundBlock, Phaser.Physics.ARCADE);
 
@@ -64,7 +65,7 @@ function create() {
     bullet.body.collideWorldBounds = true;
     bullet.body.bounce.setTo(1, 1);
     bullet.kill();
-    //game.camera.follow(bullet);
+    //game.camera.follow(bullet, Phaser.Camera.FOLLOW_TOPDOWN);
 
 }
 
