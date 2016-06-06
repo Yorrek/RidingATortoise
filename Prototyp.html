@@ -14,7 +14,7 @@
 
 <script type="text/javascript">
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, shootBullet:
+var game = new Phaser.Game(1000, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, shootBullet:
 shootBullet });
 
 
@@ -37,11 +37,14 @@ function create() {
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    game.world.setBounds(0, 0, 1920, 1920);
+    game.world.setBounds(0, 0, 1920, 600);
 
-    bg = game.add.tileSprite(0, 0, 1920, 1920, 'background');
 
-    this.GRAVITY = 500; // pixels/second/second
+    bg = game.add.tileSprite(0, 0, 3840, 1000, 'background');
+
+
+
+    this.GRAVITY = 500;
     game.physics.arcade.gravity.y = this.GRAVITY;
 
     this.gun = this.game.add.sprite(50, this.game.height - 100, 'cannon');
@@ -71,16 +74,17 @@ function create() {
 
 
 function shootBullet() {
-    //game.camera.follow(bullet);
+    bullet.reset(this.gun.x, this.gun.y);
+    bullet.alive = true;
     bullet.checkWorldBounds = false;
     bullet.outOfBoundsKill = false;
-
-
-    bullet.reset(this.gun.x, this.gun.y);
-    bullet.rotation = this.gun.rotation;
-
-
+    game.camera.follow(bullet);
     game.physics.arcade.moveToPointer(bullet, 800);
+
+
+     game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
+    //game.camera.focusOnXY(0, 0);
+
 }
 
 
@@ -92,6 +96,7 @@ function update() {
 
     if (this.game.input.activePointer.isDown) {
         this.shootBullet();
+
     }
 }
 
