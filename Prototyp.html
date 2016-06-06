@@ -24,7 +24,8 @@ var GameState = function(game) {
 
 function preload() {
      game.load.image('background', 'assets/szenen/bg_desert.png');
-     game.load.image('cannon', 'assets/cannon.png');
+     game.load.image('cannon', 'assets/objects/canon/canon_base.png');
+     game.load.image('canon_barrel', 'assets/objects/canon/canon_barrel.png');
      game.load.image('platform', 'assets/platform.png');
      game.load.image('star', 'assets/star.png');
 
@@ -47,7 +48,15 @@ function create() {
     game.physics.arcade.gravity.y = this.GRAVITY;
 
     this.gun = this.game.add.sprite(50, this.game.height - 100, 'cannon');
-    this.gun.anchor.setTo(0.5, 0.5);
+    this.gun.anchor.setTo(0.5,0.5);
+    this.gun.scale.x = 0.25;
+    this.gun.scale.y = 0.25;
+    this.game.world.bringToTop(this.gun);
+    
+    this.gun2 = game.add.sprite(80, game.height - 110, 'canon_barrel');
+    this.gun2.anchor.setTo(0.1, 0.5);
+    this.gun2.scale.x = 0.25;
+    this.gun2.scale.y = 0.25;
 
 
     groundBlock = this.game.add.sprite(0, this.game.height - 64, 'platform');
@@ -83,22 +92,8 @@ function shootBullet() {
 
 
      game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
-     function generateBooster () {
-    boosters = game.add.group();
-    boosters.enableBody = true;
-    var numBooster = game.rnd.integerInRange(0,5)
-    var booster;
-    
-    for (var i = 0; i < numBooster; i++){
-        var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
-        booster = booster.create(x, game.height-75, 'star');
-        booster.body.collideWorldBounds = false;
-        booster.body.immovable = false;
-    }
     
     
-
-}
 
 
 }
@@ -122,12 +117,29 @@ function update() {
 
 
 
-
-    this.gun.rotation = this.game.physics.arcade.angleToPointer(this.gun);
+ this.game.world.bringToTop(this.gun);
+    this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun);
 
     if (this.game.input.activePointer.isDown) {
         this.shootBullet();
     }
+    
+     function generateBooster () {
+    boosters = game.add.group();
+    boosters.enableBody = true;
+    var numBooster = game.rnd.integerInRange(0,5)
+    var booster;
+    
+    for (var i = 0; i < numBooster; i++){
+        var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
+        booster = boosters.create(x, game.height-75, 'star');
+        booster.body.collideWorldBounds = false;
+        booster.body.immovable = false;
+    }
+    
+    
+
+}
     
    
 
