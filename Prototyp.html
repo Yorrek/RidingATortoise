@@ -83,6 +83,22 @@ function shootBullet() {
 
 
      game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
+     function generateBooster () {
+    boosters = game.add.group();
+    boosters.enableBody = true;
+    var numBooster = game.rnd.integerInRange(0,5)
+    var booster;
+    
+    for (var i = 0; i < numBooster; i++){
+        var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
+        booster = booster.create(x, game.height-75, 'star');
+        booster.body.collideWorldBounds = false;
+        booster.body.immovable = false;
+    }
+    
+    
+
+}
 
 
 }
@@ -96,6 +112,8 @@ function bodenBeruehren() {
                  bullet.kill();
                  }
         }
+    
+    
 
 function update() {
 
@@ -110,16 +128,11 @@ function update() {
     if (this.game.input.activePointer.isDown) {
         this.shootBullet();
     }
-
+    
+   
 
 
 }
-
-
-
-
-
-
 
 </script>
 
