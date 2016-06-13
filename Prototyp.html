@@ -37,7 +37,7 @@ function create() {
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    game.world.setBounds(0, 0, 1920, 600);
+    game.world.setBounds(0, 0, 6000, 600);
 
 
     bg = game.add.tileSprite(0, 0, 3840, 1000, 'background');
@@ -52,7 +52,7 @@ function create() {
     this.gun.scale.x = 0.25;
     this.gun.scale.y = 0.25;
     this.game.world.bringToTop(this.gun);
-    
+
     this.gun2 = game.add.sprite(80, game.height - 110, 'canon_barrel');
     this.gun2.anchor.setTo(0.1, 0.5);
     this.gun2.scale.x = 0.25;
@@ -73,7 +73,7 @@ function create() {
     this.NUMBER_OF_BULLETS = 1;
     bullet.anchor.setTo(0.5, 0.5);
     this.game.physics.enable(bullet, Phaser.Physics.ARCADE);
-    bullet.body.collideWorldBounds = true;
+    bullet.body.collideWorldBounds = false;
     bullet.body.bounce.setTo(1, 1);
     bullet.kill();
 
@@ -84,31 +84,34 @@ function create() {
 function shootBullet() {
     bullet.reset(this.gun.x, this.gun.y);
     bullet.alive = true;
-    bullet.checkWorldBounds = false;
+    bullet.checkWorldBounds = true;
     bullet.outOfBoundsKill = false;
     game.camera.follow(bullet);
     game.physics.arcade.moveToPointer(bullet, 800);
-    game.debug.text("Distance to pointer: " + game.physics.arcade.distanceToPointer(bullet), 32, 32);
 
 
-     game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
-    
-    
+
+
+
+
 
 
 }
 
 function bodenBeruehren() {
 
-        if (bullet.body.velocity.x >0){
+        if (bullet.body.velocity.x >=200){
         bullet.body.velocity.x -= 200;
+
         }
-                 else{
-                 bullet.kill();
+                 else {
+                 bullet.body.velocity.x= 0; 
+                 bullet.body.velocity.y= 0;
                  }
+
         }
-    
-    
+
+
 
 function update() {
 
@@ -123,25 +126,32 @@ function update() {
     if (this.game.input.activePointer.isDown) {
         this.shootBullet();
     }
-    
+
      function generateBooster () {
     boosters = game.add.group();
     boosters.enableBody = true;
     var numBooster = game.rnd.integerInRange(0,5)
     var booster;
-    
+
     for (var i = 0; i < numBooster; i++){
         var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
         booster = boosters.create(x, game.height-75, 'star');
         booster.body.collideWorldBounds = false;
         booster.body.immovable = false;
     }
-    
-    
+
+
+    game.world.wrap(bullet, 0, true);
+
+    //if (bullet.checkWorldBounds = true){
+    //bg.reset(this.bg.x, this.bg.y);
+    //groundBlock.reset(this.groundBlock.x, this.groundBlock.y);
+
+
 
 }
-    
-   
+
+
 
 
 }
