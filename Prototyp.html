@@ -16,8 +16,9 @@
 var game = new Phaser.Game(1000, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, shootBullet:
 shootBullet,  });
 
-
-
+var powerBar;
+var powerTween;
+var bulletSpeed;
 var GameState = function(game) {
 };
 
@@ -78,6 +79,7 @@ function create() {
     bullet.body.collideWorldBounds = false;
     bullet.body.bounce.setTo(1, 1);
 
+    game.input.onDown.add(prepareToJump, this);
     bullet.kill();
 
 
@@ -107,8 +109,33 @@ function bodenBeruehren() {
 
         }
 
+function prepareToJump(){
+         bullet.reset(this.gun.x, this.gun.y);
+         bullet.alive = true;
+         bullet.checkWorldBounds = true;
+         bullet.outOfBoundsKill = false;
+         bullet.rotation=this.game.physics.arcade.angleToPointer(this.gun);
+         game.camera.follow(bullet);
+         if(bullet.body.velocity.y==0){
 
 
+         powerBar = game.add.sprite(this.gun.x,this.gun.y-100,'platform');
+         powerBar.width = 0;
+         powerTween = game.add.tween(powerBar).to({width: 100 }, 1000, Phaser.Easing.Linear.None,true);
+         game.input.onDown.remove(prepareToJump, this);
+         game.input.onUp.add(jump, this);
+          }
+         }
+function jump(){
+          bulletSpeed= -powerBar.width*3-100
+          powerBar.destroy();
+          game.tweens.removeAll();
+          bullet.body.velocity.x = 1000;
+          bullet.body.velocity.y = bulletSpeed*2;
+
+          powerTween.stop();
+          game.input.onUp.remove(jump, this);
+          }
 function update() {
 
     game.physics.arcade.collide(bullet, groundBlock, bodenBeruehren);
@@ -119,9 +146,10 @@ function update() {
  this.game.world.bringToTop(this.gun);
     this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun);
 
-    if (this.game.input.activePointer.isDown) {
-        this.shootBullet();
-    }
+
+
+
+
 
      function generateBooster () {
     boosters = game.add.group();
