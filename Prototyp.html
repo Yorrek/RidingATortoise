@@ -126,33 +126,10 @@ function bodenBeruehren() {
                  }
 
         }
-<<<<<<< HEAD
     
-function generateBooster() {
-    boosters = game.add.group();
-    boosters.enableBody = true;
-    
-    var booster;
-    
-    
-        var x = game.rnd.integer(this.game.maxWidth);
-    var y = game.rnd.integer(this.game.maxHeight);
-        booster = boosters.create(x,y, 'star');
-        booster.body.collideWorldBounds = false;
-        booster.body.immovable = true;
-        booster.body.allowGravity = false;
-    
-    
-    
+ 
     
 
-}
-    
-    
-=======
-
-
->>>>>>> 48935bd7811414de7f15f865f58944062d7b5473
 
 function update() {
 
@@ -167,35 +144,18 @@ function update() {
     if (this.game.input.activePointer.isDown) {
         this.shootBullet();
     }
-<<<<<<< HEAD
-    if (bullet.alive){
-    generateBooster ();
-    }else{
-      
-    }
-}
+
+    /*if (bullet.alive){
+        
     
-
-
+        while(!booster.alive){
+        generateBooster();
+        }
+    }*/
+        
     
-   
-=======
-
-     function generateBooster () {
-    boosters = game.add.group();
-    boosters.enableBody = true;
-    var numBooster = game.rnd.integerInRange(0,5)
-    var booster;
-
-    for (var i = 0; i < numBooster; i++){
-        var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
-        booster = boosters.create(x, game.height-75, 'star');
-        booster.body.collideWorldBounds = false;
-        booster.body.immovable = false;
-    }
-
-
-    game.world.wrap(bullet, 0, true);
+    
+  //  game.world.wrap(bullet, 0, true);
 
     //if (bullet.checkWorldBounds = true){
     //bg.reset(this.bg.x, this.bg.y);
