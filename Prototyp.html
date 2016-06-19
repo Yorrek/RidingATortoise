@@ -13,9 +13,9 @@
 
 <script type="text/javascript">
 
-var game = new Phaser.Game(1000, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, shootBullet:
-shootBullet,  });
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update,   });
 
+var bullet;
 var powerBar;
 var powerTween;
 var bulletSpeed;
@@ -29,6 +29,7 @@ function preload() {
      game.load.image('canon_barrel', 'assets/objects/canon/canon_barrel.png');
      game.load.image('platform', 'assets/platform.png');
      game.load.image('sloth', 'assets/objects/sloth.png');
+     game.load.image('star', 'assets/star.png');
 
 
 }
@@ -38,11 +39,11 @@ function create() {
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    game.world.setBounds(0, 0, 6000, 600);
+    game.world.setBounds(0, 0, 3840, 0);
 
 
-    bg = game.add.tileSprite(0, 0, 3840, 1000, 'background');
 
+    bg = game.add.tileSprite(0, 0, game.stage.bounds.width, 600, 'background');
 
 
     this.GRAVITY = 500;
@@ -73,27 +74,39 @@ function create() {
     bullet.scale.x = 0.05;
     bullet.scale.y = 0.05;
 
+
     this.NUMBER_OF_BULLETS = 1;
     bullet.anchor.setTo(0.5, 0.5);
     this.game.physics.enable(bullet, Phaser.Physics.ARCADE);
     bullet.body.collideWorldBounds = false;
     bullet.body.bounce.setTo(1, 1);
-
-    game.input.onDown.add(prepareToJump, this);
     bullet.kill();
+    game.input.onDown.add(prepareToJump, this);
 
 
+    var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
+
+        booster =this.game.add.sprite(500, game.height-500, 'star');
+
+        booster.body.collideWorldBounds = false;
+        booster.body.immovable = true;
+
+   function generateBooster () {
+        /*boosters = game.add.group();
+        boosters.enableBody = true;
+        var numBooster = game.rnd.integerInRange(0,5)*/
+
+
+
+
+
+
+   }
 }
 
 
-function shootBullet() {
-    bullet.reset(this.gun.x, this.gun.y);
-    bullet.alive = true;
-    bullet.checkWorldBounds = true;
-    bullet.outOfBoundsKill = false;
-    game.camera.follow(bullet);
-    game.physics.arcade.moveToPointer(bullet, 800);
-    }
+
+
 
 function bodenBeruehren() {
 
@@ -109,6 +122,7 @@ function bodenBeruehren() {
 
         }
 
+
 function prepareToJump(){
          bullet.reset(this.gun.x, this.gun.y);
          bullet.alive = true;
@@ -116,6 +130,7 @@ function prepareToJump(){
          bullet.outOfBoundsKill = false;
          bullet.rotation=this.game.physics.arcade.angleToPointer(this.gun);
          game.camera.follow(bullet);
+
          if(bullet.body.velocity.y==0){
 
 
@@ -130,12 +145,20 @@ function jump(){
           bulletSpeed= -powerBar.width*3-100
           powerBar.destroy();
           game.tweens.removeAll();
-          bullet.body.velocity.x = 1000;
+          bullet.body.velocity.x = -bulletSpeed*2;
           bullet.body.velocity.y = bulletSpeed*2;
 
           powerTween.stop();
+
           game.input.onUp.remove(jump, this);
           }
+
+
+
+
+
+
+
 function update() {
 
     game.physics.arcade.collide(bullet, groundBlock, bodenBeruehren);
@@ -145,27 +168,26 @@ function update() {
 
  this.game.world.bringToTop(this.gun);
     this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun);
+    bg.tilePosition.x += -2;
+    //game.world.wrap(sloth, 0, true, true, true);
 
 
 
 
 
 
-     function generateBooster () {
-    boosters = game.add.group();
-    boosters.enableBody = true;
-    var numBooster = game.rnd.integerInRange(0,5)
-    var booster;
 
-    for (var i = 0; i < numBooster; i++){
-        var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
-        booster = boosters.create(x, game.height-75, 'star');
-        booster.body.collideWorldBounds = false;
-        booster.body.immovable = false;
-    }
+    /*if (bullet.alive){
 
 
-    game.world.wrap(bullet, 0, true);
+        while(!booster.alive){
+        generateBooster();
+        }
+    }*/
+
+
+
+
 
     //if (bullet.checkWorldBounds = true){
     //bg.reset(this.bg.x, this.bg.y);
@@ -178,7 +200,6 @@ function update() {
 
 
 
-}
 
 </script>
 
