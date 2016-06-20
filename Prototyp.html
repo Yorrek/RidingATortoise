@@ -197,7 +197,7 @@ function update() {
     this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun);
     bg.tilePosition.x += -2;
     
-    if(!bullet.alive){
+    if(bullet.alive){
         generateBooster();
     }
 }
