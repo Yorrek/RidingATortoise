@@ -133,7 +133,6 @@ function bodenBeruehren() {
         var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
    boosters = game.add.group();
      boosters.enableBody = true; 
-        boosters.alive = false;
          while(!boosters.alive){
     var booster = boosters.create(x, game.height-250, 'star');
     this.game.physics.enable(boosters, Phaser.Physics.ARCADE) ; 
