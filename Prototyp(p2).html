@@ -13,12 +13,13 @@
 
 <script type="text/javascript">
 
-var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', { preload: preload, create: create, update: update,   });
+var game = new Phaser.Game(1000, 600, Phaser.CANVAS, '', { preload: preload, create: create, update: update,   });
 
 var bullet;
 var powerBar;
 var powerTween;
 var bulletSpeed;
+var boden;
 var GameState = function(game) {
 };
 
@@ -30,23 +31,25 @@ function preload() {
      game.load.image('platform', 'assets/platform.png');
      game.load.image('sloth', 'assets/objects/sloth.png');
      game.load.image('star', 'assets/star.png');
-     game.load.image('beanbag', 'assets/objects/beanbag/beanbag_red_small.png')
-
-
+     game.load.image('beanbag1', 'assets/objects/beanbag/beanbag_red_small.png')
+     game.load.image('beanbag2', 'assets/objects/beanbag/beanbag_blue_small.png')
+     game.load.image('beanbag3', 'assets/objects/beanbag/beanbag_yellow_small.png')
 }
 
 
 function create() {
 
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+    game.physics.startSystem(Phaser.Physics.P2JS);
 
     game.world.setBounds(0, 0, 3840, 0);
 
-    bg = game.add.tileSprite(0, 0, game.stage.bounds.width, 600, 'background');
+    bg = game.add.tileSprite(0, 0,   1000, 600, 'background');
 
 
-    this.GRAVITY = 9.81;
-    game.physics.arcade.gravity.y = this.GRAVITY;
+    game.physics.p2.gravity.y = 300;
+    
+    game.physics.p2.setImpactEvents(true);
+    
 
     this.gun = this.game.add.sprite(50, this.game.height - 100, 'cannon');
     this.gun.anchor.setTo(0.5,0.5);
@@ -60,61 +63,66 @@ function create() {
     this.gun2.scale.y = 0.25;
 
 
-    groundBlock = this.game.add.sprite(0, this.game.height - 64, 'platform');
-    groundBlock.scale.setTo(this.game.width, 2);
-    this.game.physics.enable(groundBlock, Phaser.Physics.ARCADE);
-
-    groundBlock.body.immovable = true;
-    groundBlock.body.allowGravity = false;
-    game.physics.arcade.enable(groundBlock);
-
+    var boden = this.game.add.sprite(0, this.game.height - 30, 'platform');
+    boden.scale.setTo(this.game.width, 2);
+    boden.anchor.setTo(0.5, 0.5);
+    game.physics.p2.enable(boden, false);
+    boden.body.static =true; 
+ 
 
     bullet = this.game.add.sprite(0.5, 0.5, 'sloth');
     bullet.scale.x = 0.05;
     bullet.scale.y = 0.05;
-
-
     this.NUMBER_OF_BULLETS = 1;
-    bullet.anchor.setTo(0.5, 0.5);
-    this.game.physics.enable(bullet, Phaser.Physics.ARCADE);
-    bullet.body.collideWorldBounds = false;
-    bullet.body.bounce.setTo(1, 1);
+    
+    game.physics.p2.enable(bullet, true);
+    bullet.body.setCircle(35);
+   
+
+    
     bullet.kill();
 
+    
+    beanbagz = game.add.group();
+    beanbagz.enableBody = true;
+    beanbagz.physicsBodyType = Phaser.Physics.P2JS;
+
+
+    for (var i = 0; i < 6; i++)
+    {
+       
+        var beanbags = beanbagz.create(100 + (Math.floor(Math.random() * 6) * 1000), game.height - 50, 'beanbag1');
+        i
+
+        beanbags.scale.x = 0.75;
+        beanbags.scale.y = 0.75;
+        beanbags.body.setCircle(20);
+        beanbags.body.static =true; 
+        
+    }
+    
+
+    game.physics.p2.updateBoundsCollisionGroup();
+    
+    
+    
+    beanbags.body.onBeginContact.add(hitBeanbag, this);
+    
+
+    
     game.input.onDown.add(prepareToJump, this);
 
 
-    var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
-
-        booster =this.game.add.sprite(500, game.height-500, 'star');
-
-        booster.body.collideWorldBounds = false;
-        booster.body.immovable = true;
-
- 
-}
-
-
-  function generateBooster () {
-        /*boosters = game.add.group();
-        boosters.enableBody = true;
-        var numBooster = game.rnd.integerInRange(0,5)*/
-
-
-    
-    beanbags = game.add.group();
-    beanbags.enableBody = true;
    
-    for (var i = 0; i < 6; i++ ){
-     game.add.sprite(i*300, this.game.height - 150,'beanbag');
-        
-        beanbags.scale.x = 0.05;
-        beanbags.scale.y = 0.05;
-    }
-  }
+
+ function hitBeanbag(body, bodyB, shapeA, shapeB, equation) {
+
+    body.velocity.x = -600;
+
+
+}   
     
-    
-    
+
 function shootBullet() {
     
     bullet.reset(this.gun.x, this.gun.y);
@@ -126,23 +134,10 @@ function shootBullet() {
     
 }
 
-function bodenBeruehren() {
-
-        if (bullet.body.velocity.x >=200){
-        bullet.body.velocity.x -= 200;
-        bullet.angle = bullet.body.velocity.x;
-        }
-                 else {
-                 bullet.body.velocity.x= 0;
-                 bullet.body.velocity.y= 0;
-                 bullet.angle =0;
-                 }
-
-        }
-
 
 
 function prepareToJump(){
+        
          bullet.reset(this.gun.x, this.gun.y);
          bullet.alive = true;
          bullet.checkWorldBounds = true;
@@ -170,16 +165,18 @@ function jump(){
           powerTween.stop();
 
           game.input.onUp.remove(jump, this);
+        
           }
 
 function collectBooster (bullet, booster){
     booster.kill();
     bullet.body.acceleration =+ 400;
+    game.world.wrap(card, 0, true);
 }
 
 
 
-function generateBooster () {
+{function generateBooster () {
         /*boosters = game.add.group();
         boosters.enableBody = true;
         var numBooster = game.rnd.integerInRange(0,5)*/
@@ -187,6 +184,7 @@ function generateBooster () {
         var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
    boosters = game.add.group();
      boosters.enableBody = true; 
+        boosters.alive = false;
          while(!boosters.alive){
     var booster = boosters.create(x, game.height-250, 'star');
     this.game.physics.enable(boosters, Phaser.Physics.ARCADE) ; 
@@ -194,7 +192,7 @@ function generateBooster () {
      booster.body.immovable = true;
     booster.body.allowGravity = false;
          }
-   }
+   }}
     
 
 
@@ -210,39 +208,7 @@ function update() {
     this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun);
     bg.tilePosition.x += -2;
     
-    //game.world.wrap(sloth, 0, true, true, true);
-
-    /*if (bullet.alive){
-
-
-        while(!booster.alive){
-        generateBooster();
-        }
-    }*/
-
-    //if (this.game.input.activePointer.isDown) {
-        //this.shootBullet();
-    
-    //}
-
-    //if (bullet.alive){ 
-    //    generateBooster();   
-    //}
   
-
- 
-    
-  //  game.world.wrap(bullet, 0, true);
-
-
-    //if (bullet.checkWorldBounds = true){
-    //bg.reset(this.bg.x, this.bg.y);
-    //groundBlock.reset(this.groundBlock.x, this.groundBlock.y);
-
-}
-
-
-
 
 
 
