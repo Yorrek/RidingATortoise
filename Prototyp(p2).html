@@ -40,6 +40,7 @@ function preload() {
 function create() {
 
     game.physics.startSystem(Phaser.Physics.P2JS);
+    game.physics.startSystem(Phaser.Physics.ARCADE);
 
     game.world.setBounds(0, 0, 3840, 0);
 
@@ -56,11 +57,13 @@ function create() {
     this.gun.scale.x = 0.25;
     this.gun.scale.y = 0.25;
     this.game.world.bringToTop(this.gun);
+    game.physics.arcade.enable(this.gun, false);
 
     this.gun2 = game.add.sprite(80, game.height - 110, 'canon_barrel');
     this.gun2.anchor.setTo(0.1, 0.5);
     this.gun2.scale.x = 0.25;
     this.gun2.scale.y = 0.25;
+    game.physics.arcade.enable(this.gun, false);
 
 
     var boden = this.game.add.sprite(0, this.game.height - 30, 'platform');
@@ -106,14 +109,14 @@ function create() {
     
     
     
-    beanbags.body.onBeginContact.add(hitBeanbag, this);
+ beanbags.body.onBeginContact.add(hitBeanbag, this);
     
 
     
     game.input.onDown.add(prepareToJump, this);
 
 
-   
+}
 
  function hitBeanbag(body, bodyB, shapeA, shapeB, equation) {
 
@@ -208,7 +211,7 @@ function update() {
     this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun);
     bg.tilePosition.x += -2;
     
-  
+}
 
 
 
