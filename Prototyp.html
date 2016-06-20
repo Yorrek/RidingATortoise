@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
         <meta charset="UTF-8" />
-    <title>Phaser - Making your first game, part 9</title>
+    <title>RidingATortoise</title>
         <script type="text/javascript" src="js/phaser.min.js"></script>
     <style type="text/css">
         body {
@@ -19,6 +19,7 @@ var bullet;
 var powerBar;
 var powerTween;
 var bulletSpeed;
+var boosterCount = 0;
 var GameState = function(game) {
 };
 
@@ -46,7 +47,11 @@ function create() {
     bg.fixedToCamera=true;
 
 
+<<<<<<< HEAD
     this.GRAVITY = 300;
+=======
+    this.GRAVITY = 600;
+>>>>>>> 45611d9590bc4e896b03a930c6fcb069953baac8
     game.physics.arcade.gravity.y = this.GRAVITY;
 
     this.gun = this.game.add.sprite(50, this.game.height - 100, 'cannon');
@@ -101,18 +106,18 @@ function create() {
     //me.timer = game.time.events.loop(2000, me.addPlatform, me);
 
 
-    var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
-
-        booster =this.game.add.sprite(500, game.height-500, 'star');
-
-        booster.body.collideWorldBounds = false;
-        booster.body.immovable = true;
-
+   
  
 }
 
 
  
+<<<<<<< HEAD
+=======
+    
+    
+function shootBullet() {
+>>>>>>> 45611d9590bc4e896b03a930c6fcb069953baac8
     
     
 
@@ -172,33 +177,45 @@ function schuss(){
 
 function collectBooster (bullet, booster){
     booster.kill();
+    boosterCount--;
     bullet.body.acceleration =+ 400;
 }
 
 
 
-function generateBooster () {
-        /*boosters = game.add.group();
+ function generateBooster () {
+     
+      
+       var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
+
+        boosters = game.add.group();
         boosters.enableBody = true;
-        var numBooster = game.rnd.integerInRange(0,5)*/
+        var numBooster = game.rnd.integerInRange(300,500);
+
+
+   
+    for (var i = 1; i < 7; i++ ){
        
-        var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
-   boosters = game.add.group();
-     boosters.enableBody = true; 
-         while(!boosters.alive){
-    var booster = boosters.create(x, game.height-250, 'star');
-    this.game.physics.enable(boosters, Phaser.Physics.ARCADE) ; 
-     booster.body.collideWorldBounds = false;
-     booster.body.immovable = true;
-    booster.body.allowGravity = false;
-         }
-   }
-    
+        if(boosterCount<1){
+        var beanbag = boosters.create(i*numBooster, this.game.height - 150,'beanbag');
+        beanbag.body.allowGravity = false;
+        boosterCount++;
+            return boosterCount;
+        }
+  
+    }        
+ 
+}
 
 
 function update() {
    
     game.physics.arcade.collide(bullet, groundBlock, bodenBeruehren);
+<<<<<<< HEAD
+=======
+    game.physics.arcade.collide(generateBooster.boosters, groundBlock);
+    
+>>>>>>> 45611d9590bc4e896b03a930c6fcb069953baac8
     game.physics.arcade.overlap(bullet, generateBooster.boosters, collectBooster);
     game.physics.arcade.collide(bullet, beanbags, overlapBeanbag);
     
@@ -211,6 +228,14 @@ function update() {
     if (bullet.x>600){bg.autoScroll(-bullet.body.velocity.x,0);}
     
     
+<<<<<<< HEAD
+=======
+    if(!bullet.alive){
+        generateBooster();
+    }
+}
+    //game.world.wrap(sloth, 0, true, true, true);
+>>>>>>> 45611d9590bc4e896b03a930c6fcb069953baac8
 
     /*if (bullet.alive){
 
@@ -239,7 +264,7 @@ function update() {
     //bg.reset(this.bg.x, this.bg.y);
     //groundBlock.reset(this.groundBlock.x, this.groundBlock.y);
 
-}
+
 
 function render() {
 
