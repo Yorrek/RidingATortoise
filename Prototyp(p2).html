@@ -44,7 +44,9 @@ function create() {
     game.world.setBounds(0, 0, 3840, 0);
 
     bg = game.add.tileSprite(0, 0,   1000, 600, 'background');
-
+    bg.fixedToCamera=true;
+    
+    
 
     game.physics.p2.gravity.y = 300;
     
@@ -91,7 +93,7 @@ function create() {
     for (var i = 0; i < 6; i++)
     {
        
-        var beanbags = beanbagz.create(100 + (Math.floor(Math.random() * 6) * 1000), game.height - 50, 'beanbag1');
+        var beanbags = beanbagz.create(100 + (Math.floor(Math.random() * 6) * 1000), game.height - 70, 'beanbag1');
         i
 
         beanbags.scale.x = 0.75;
@@ -123,16 +125,7 @@ function create() {
 }   
     
 
-function shootBullet() {
-    
-    bullet.reset(this.gun.x, this.gun.y);
-    bullet.alive = true;
-    bullet.checkWorldBounds = true;
-    bullet.outOfBoundsKill = false;
-    game.camera.follow(bullet);
-    game.physics.arcade.moveToPointer(bullet, 800);
-    
-}
+
 
 
 
@@ -165,7 +158,7 @@ function jump(){
           powerTween.stop();
 
           game.input.onUp.remove(jump, this);
-        
+    
           }
 
 function collectBooster (bullet, booster){
@@ -202,14 +195,19 @@ function update() {
     game.physics.arcade.overlap(bullet, generateBooster.boosters, collectBooster);
 
     bullet.angle += 1;
+    
 
 
     this.game.world.bringToTop(this.gun);
     this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun);
-    bg.tilePosition.x += -2;
+    bullet.checkWorldBounds = true;
+    //bullet.events.onOutOfBounds.add(alienOut, this);
+    //bg.tilePosition.x += bullet.velocity.x;
+    //game.world.wrap(bullet, 0, true);
+    if (bullet.x>600){bg.autoScroll(bullet.body.velocity.x*35,0);}
+    
     
 }
-
 
 
 </script>
