@@ -78,6 +78,7 @@ function create() {
     bullet = this.game.add.sprite(0.5, 0.5, 'sloth');
     bullet.scale.x = 0.05;
     bullet.scale.y = 0.05;
+    bullet.anchor.setTo(0.5, 0.5);
     this.NUMBER_OF_BULLETS = 1;
     
     game.physics.p2.enable(bullet, true);
@@ -110,10 +111,24 @@ function create() {
     game.physics.p2.updateBoundsCollisionGroup();
     
     
+    beanbags.body.onBeginContact.add(hitBeanbag, this);
     
- beanbags.body.onBeginContact.add(hitBeanbag, this);
-    
+    var bulletMaterial = game.physics.p2.createMaterial('bulletMaterial', bullet.body);
 
+    var worldMaterial = game.physics.p2.createMaterial('worldMaterial',boden.body);
+    
+    
+    var bodenBerueren = game.physics.p2.createContactMaterial(bulletMaterial, worldMaterial);
+
+    bodenBerueren.friction = 1000;     
+    bodenBerueren.restitution = 1.0;  
+    bodenBerueren.stiffness = 1e7;    
+    bodenBerueren.relaxation = 3;     
+    bodenBerueren.frictionStiffness = 1e7;    
+    bodenBerueren.frictionRelaxation = 3;     
+    
+    
+    
     
     game.input.onDown.add(prepareToJump, this);
 
@@ -122,7 +137,7 @@ function create() {
 
  function hitBeanbag(body, bodyB, shapeA, shapeB, equation) {
 
-    body.velocity.x = -600;
+    body.velocity.x -= 300;
 
 
 }   
@@ -190,25 +205,26 @@ function collectBooster (bullet, booster){
          }
    }}
     
-
+function out(){bg.reset(0, 0);
+              bullet.reset(0,0);}
 
 function update() {
    
     //game.physics.arcade.collide(bullet, groundBlock, bodenBeruehren);
     game.physics.arcade.overlap(bullet, generateBooster.boosters, collectBooster);
 
-    bullet.angle += 1;
+    bullet.angle += 5;
     
 
 
     this.game.world.bringToTop(this.gun);
     this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun);
     bullet.checkWorldBounds = true;
-    //bullet.events.onOutOfBounds.add(alienOut, this);
+    //bullet.events.onOutOfBounds.add(out, this);
     //bg.tilePosition.x += bullet.velocity.x;
     //game.world.wrap(bullet, 0, true);
-    if (bullet.x>600){bg.autoScroll(bullet.body.velocity.x*35,0);}
-    
+    //if (bullet.x>600){bg.autoScroll(bullet.body.velocity.x*35,0);}
+    //if (beanbagz.body.x < game.camera.x){beanbagz. destroy();}
     
 }
 
