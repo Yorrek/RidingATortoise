@@ -249,7 +249,8 @@ function schuss(){
     //Funktionen der Booster
 function collectTrampolins (bullet,trampolins){
     boosterCount--;
-    bullet.body.velocity.x += 200;
+    bullet.angle = -40 ;
+    bullet.body.velocity.x += 600;
     return boosterCount;
 }
     
@@ -319,7 +320,7 @@ function update() {
     
     game.physics.arcade.overlap(bullet, beanbag, collectBags);
     game.physics.arcade.overlap(bullet, trampolin, collectTrampolins);
-    game.physics.arcade.collide(bullet, generateBooster.boosters, overlapBeanbag);
+   
 
     
     bullet.angle += 1;
@@ -343,6 +344,11 @@ function update() {
         generateBooster();
     }
 
+    
+  /*  if(beanbag.x < bullet.x + 600 || trampolin.x < bullet.x + 600 ){
+        beanbag.kill();
+        trampolin.kill();
+    }*/
     
   
 
