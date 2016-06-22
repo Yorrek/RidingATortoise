@@ -153,7 +153,7 @@ function create() {
     game.input.onDown.add(vorSchuss, this);
 
 }
- 
+/*
 function clickBoost() {
    
     if (whip1.alive=true){
@@ -181,20 +181,20 @@ function clickBoost() {
     //me.timer = game.time.events.loop(2000, me.addPlatform, me);
 
 }
- 
+ */
 function clickBoost() {
     if (whipCounter > 0){
         bullet.body.velocity.y = bullet.body.velocity.y * -1;
         bullet.body.velocity.x += 200;
         switch (whipCounter){
             case 3:
-                this.whip3.visible=false;
+                whip3.kill();
                 break;
             case 2:
-                this.whip2.visible=false;
+                whip2.kill();
                 break;
             case 1:
-                this.whip1.visible=false;
+                whip1.kill();
                 break;
             default:
                 break;
