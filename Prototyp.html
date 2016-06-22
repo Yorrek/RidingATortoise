@@ -12,9 +12,10 @@
 <body>
 
 <script type="text/javascript">
-
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render  });
-
+var counter = 0;
+var text = 0;
+var game = new Phaser.Game(1280, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render  });
+var score=0;
 var bullet;
 var powerBar;
 var powerTween;
@@ -60,6 +61,7 @@ function create() {
     //Die gamesounds werden erstellt
     music = game.add.audio('musik');
     esound = game.add.audio('explosion');
+
 
        
 
@@ -113,8 +115,32 @@ function create() {
     //Die Beanbags (Hinderniss) werden erstellt und plaziert
 
 
+<<<<<<< HEAD
 
+=======
+    /*beanbags = game.add.group();
+    beanbags.enableBody = true;
+    beanbags.physicsBodyType = Phaser.Physics.ARCADE;
+ 
+    for (var i = 0; i < 6; i++ ){
+     var bean = beanbags.create(100+i*100, this.game.height - 120,'beanbag');
+        
+        bean.scale.x = 0.05;
+        bean.scale.y = 0.05;
+        
+    }*/
+
+    //var style = { font: "65px Arial", fill: "#ffffff", align: "center" };
     
+    //var text = game.add.text(50, this.game.height - 64, bullet.position.x, style);
+    
+
+     //scoreText = game.add.text(32, 550, 'Distanz: 0', { font: "20px Arial", fill: "#ffffff", align: "left" });
+
+    text = game.add.text(0, this.game.height - 64, 'Distanz: 0', { font: "40px Arial", fill: "#ffffff", align: "center" });
+>>>>>>> 27ebfb7f83259ee989293d11525c2d394e05d49d
+    
+    text.fixedToCamera=true;
 
     
     
@@ -152,8 +178,8 @@ function overlapBeanbag(){
     //Der Kanonenschuss wird vorbereitet und ein Tween wird erstellt, um die Schusstärke per Mausklick zu variieren
     
 function vorSchuss(){
-         bullet.reset(this.gun.x, this.gun.y);
          bullet.alive = true;
+    bullet.reset(this.gun.x, this.gun.y);
          bullet.checkWorldBounds = true;
          bullet.outOfBoundsKill = false;
          bullet.rotation=this.game.physics.arcade.angleToPointer(this.gun);
@@ -179,6 +205,7 @@ function vorSchuss(){
     //Die Spielfigur bewegt sich in Richtung der Maus
 
 function schuss(){
+        
           bulletSpeed= -powerBar.width*3-100
           powerBar.destroy();
           game.tweens.removeAll();
@@ -188,8 +215,12 @@ function schuss(){
           game.physics.arcade.moveToPointer(bullet, 100);
           bullet.body.velocity.x += -bulletSpeed*2;
           bullet.body.velocity.y += bulletSpeed*2;
+          game.time.events.loop(Phaser.Timer.SECOND, updateCounter, this);
           esound.play();
-          music.play(); 
+          music.play();
+          score ++;
+             
+        
           game.input.onUp.remove(schuss, this);
 
           }
@@ -217,6 +248,11 @@ function collectBooster (bullet, booster){
 
         var beanbag = boosters.create(i*numBooster, this.game.height - 150,'beanbag');
         beanbag.body.allowGravity = false;
+<<<<<<< HEAD
+=======
+       
+
+>>>>>>> 27ebfb7f83259ee989293d11525c2d394e05d49d
             
             switch (x){
                 case 1: var beanbag = boosters.create(i*numBooster, this.game.height - 150,'beanbag');
@@ -231,23 +267,33 @@ function collectBooster (bullet, booster){
       
         }
     }        
+<<<<<<< HEAD
  }
+=======
+ 
+function updateCounter() {
+
+    counter++;
+
+    text.setText('Disntanz: ' + counter);
+
+}
+
+>>>>>>> 27ebfb7f83259ee989293d11525c2d394e05d49d
 
      
      
 
 function update() {
-    score=bullet.position.x;
-    scoreString = 'Score : ';
-    scoreText = game.add.text(50, this.game.height - 64, scoreString + score, { font: '34px Arial', fill: '#fff' });
-    scoreText.fixedToCamera = true;
+    game.world.setBounds(0, 0, 3840+bullet.x, 0); 
+    //if(bullet.alive = true){scoreText.text = 'Distanz: ' + score;} 
+    
+    //scoreText = game.add.text(50, this.game.height - 64, 'Score : ' + score, { font: '40px Arial', fill: '#fff' });
+    
     //Collisionhandling für Boden ,Booster und Hindernisse
-   
     game.physics.arcade.collide(bullet, groundBlock, bodenBeruehren);
 
     //game.physics.arcade.collide(generateBooster.boosters, groundBlock);
-    
-
     //game.physics.arcade.overlap(bullet, generateBooster.boosters, collectBooster);
     //game.physics.arcade.collide(bullet, beanbags, overlapBeanbag);
 
@@ -295,7 +341,7 @@ function update() {
     }
 
 
-   //game.world.wrap(sloth, 0, true, true, true);
+   
 
 
     //if (bullet.checkWorldBounds = true){
