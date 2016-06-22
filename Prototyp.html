@@ -33,8 +33,12 @@ function preload() {
      game.load.image('sloth', 'assets/objects/sloth.png');
      game.load.image('star', 'assets/star.png');
      game.load.image('beanbag', 'assets/objects/beanbag/beanbag_red_small.png');
+<<<<<<< HEAD
      game.load.audio('explosion', 'assets/sounds/cannon.wav');
      game.load.audio('musik', 'assets/sounds/music.mp3');
+=======
+     game.load.image('trampolin', 'assets/objects/Trampoline/trampoline.png');
+>>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
 
 
 }
@@ -61,6 +65,13 @@ function create() {
 
     
 
+<<<<<<< HEAD
+=======
+
+    this.GRAVITY = 300;
+
+
+>>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
     game.physics.arcade.gravity.y = this.GRAVITY;
     
     //Die kanone wird erstellt und plaziert
@@ -101,6 +112,7 @@ function create() {
     
     //Die Beanbags (Hinderniss) werden erstellt und plaziert
 
+<<<<<<< HEAD
     beanbags = game.add.group();
     beanbags.enableBody = true;
     beanbags.physicsBodyType = Phaser.Physics.ARCADE;
@@ -117,6 +129,10 @@ function create() {
     
     var text = game.add.text(50, this.game.height - 64, bullet.position.x, style);
 
+=======
+
+    
+>>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
     
     text.fixedToCamera = true
     
@@ -125,10 +141,21 @@ function create() {
     
     //me.timer = game.time.events.loop(2000, me.addPlatform, me);
 
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
 }
+ 
 
 
+
+
+<<<<<<< HEAD
+=======
+
+>>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
 
 function bodenBeruehren() {
 
@@ -201,21 +228,39 @@ function collectBooster (bullet, booster){
  function generateBooster () {
      
       
-       var x = game.rnd.integerInRange(game.width, game.world.width - game.width);
+       var x = game.rnd.integerInRange(1,2);
 
         boosters = game.add.group();
         boosters.enableBody = true;
+<<<<<<< HEAD
         var numBooster = game.rnd.integerInRange(300,500);
     }  
+=======
+        var numBooster = game.rnd.integerInRange(500, game.world.width);
+>>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
 
 
    
     for (var i = 1; i < 7; i++ ){
        
         if(boosterCount<1){
+<<<<<<< HEAD
         var beanbag = boosters.create(i*numBooster, this.game.height - 150,'beanbag');
         beanbag.body.allowGravity = false;
         boosterCount++;
+=======
+            
+            switch (x){
+                case 1: var beanbag = boosters.create(i*numBooster, this.game.height - 150,'beanbag');
+                        beanbag.body.allowGravity = false;
+                        break;
+                case 2: var trampolin = boosters.create(i*numBooster, this.game.height - 125,'trampolin')
+                        trampolin.body.allowGravity = false;
+                        break;
+            }
+                    boosterCount++;
+            return boosterCount;
+>>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
             
         }
   
@@ -231,18 +276,24 @@ function update() {
     //Collisionhandling für Boden ,Booster und Hindernisse
    
     game.physics.arcade.collide(bullet, groundBlock, bodenBeruehren);
+<<<<<<< HEAD
 
     //game.physics.arcade.collide(generateBooster.boosters, groundBlock);
     
 
     //game.physics.arcade.overlap(bullet, generateBooster.boosters, collectBooster);
     game.physics.arcade.collide(bullet, beanbags, overlapBeanbag);
+=======
+    game.physics.arcade.collide(generateBooster.boosters, groundBlock);
     
-
+    game.physics.arcade.overlap(bullet, generateBooster.boosters, collectBooster);
+    game.physics.arcade.collide(bullet,generateBooster.boosters, overlapBeanbag);
+>>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
+    
     bullet.angle += 1;
 
-
     this.game.world.bringToTop(this.gun);
+<<<<<<< HEAD
     this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun);
     if (bullet.x>600){bg.autoScroll(-bullet.body.velocity.x,0);}
 
@@ -251,10 +302,19 @@ function update() {
     }
  
     /*if (bullet.alive){
+=======
+    this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun2);
+    if (bullet.x>600){
+        bg.autoScroll(-bullet.body.velocity.x,0);
+    }
+    
 
+>>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
 
-        while(!booster.alive){
+    if(bullet.alive){
+
         generateBooster();
+<<<<<<< HEAD
         }
     }*/
 
@@ -264,6 +324,12 @@ function update() {
     //    generateBooster();   
     //}
   
+=======
+    }
+}
+
+   //game.world.wrap(sloth, 0, true, true, true);
+>>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
 
     //if (bullet.checkWorldBounds = true){
     //bg.reset(this.bg.x, this.bg.y);
@@ -277,6 +343,7 @@ function render() {
         game.debug.bodyInfo(bullet, 32, 64);
 
 }
+
 
 
 
