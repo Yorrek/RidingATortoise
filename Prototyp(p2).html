@@ -83,7 +83,8 @@ function create() {
     
     game.physics.p2.enable(bullet, true);
     bullet.body.setCircle(35);
-   
+    
+    me.timer = game.time.events.loop(2000, me.addPlatform, me);
 
     
     bullet.kill();
@@ -221,7 +222,7 @@ function update() {
     this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun);
     bullet.checkWorldBounds = true;
     //bullet.events.onOutOfBounds.add(out, this);
-    //bg.tilePosition.x += bullet.velocity.x;
+        bg.tilePosition.x += bullet.velocity.x;
     //game.world.wrap(bullet, 0, true);
     //if (bullet.x>600){bg.autoScroll(bullet.body.velocity.x*35,0);}
     //if (beanbagz.body.x < game.camera.x){beanbagz. destroy();}
