@@ -21,7 +21,7 @@ var trampolin;
 var powerBar;
 var powerTween;
 var bulletSpeed;
-var boosterCount = 0;
+var boosterCount = -5;
 var whipCounter = 3;
 var bulletSpeed =0;
 var GameState = function(game) {
@@ -143,6 +143,7 @@ function create() {
     
 
     game.input.onDown.add(vorSchuss, this);
+    game.time.events.loop(Phaser.Timer.SECOND, generateBooster, this);
 
 }
 
@@ -259,11 +260,12 @@ function collectBags (bullet, trampolins){
     bullet.kill();
     bullet = game.add.sprite(beanbag.x, beanbag.y, 'sloth');
     game.world.bringToTop(bullet);
-    
    
     return boosterCount;
     
 }
+       
+    
 
  function generateBooster () {
      
@@ -272,40 +274,56 @@ function collectBags (bullet, trampolins){
 
         bags = game.add.group();
         bags.enableBody = true;
-         bags.physicsBodyType = Phaser.Physics.ARCADE;
-         bags.checkWorldBounds = true;
-           bags.outOfBoundsKill=true;
+        bags.physicsBodyType = Phaser.Physics.ARCADE;
+        bags.checkWorldBounds = true;
+        bags.outOfBoundsKill=true; 
+       
      
         trampolins = game.add.group();
         trampolins.enableBody = true;
-         trampolins.physicsBodyType = Phaser.Physics.ARCADE;
+        trampolins.physicsBodyType = Phaser.Physics.ARCADE;
         trampolins.checkWorldBounds = true;
         trampolins.outOfBoundsKill=true;
+       
+     
+            
+    
      
         var numBooster = game.rnd.integerInRange(500, game.world.width);
          
     for (var i = 1; i < 7; i++ ){
-       
-        if(boosterCount<1){
-
+       boosterCount++;
+        if(boosterCount % 2 == 1){
+          
             switch (x){
                 case 1: beanbag = bags.create(i*numBooster, this.game.height - 150,'beanbag');
                         beanbag.body.allowGravity = false;
                          beanbag.body.immovable = true;
+                         beanbag.events.onOutOfBounds.add(outOfBoundsKill);
                         
                         break;
                     
                 case 2: trampolin = trampolins.create(i*numBooster, this.game.height - 125,'trampolin')
                         trampolin.body.allowGravity = false;
                         trampolin.body.immovable = true;
+                        trampolin.events.onOutOfBounds.add(outOfBoundsKill);
                         break;
                     
             }
-            boosterCount++;
+            
+            
             return boosterCount;
         }
-    }        
+    
+    }
+    
  }
+ function outOfBoundsKill(){
+   
+     boosterCount--;
+     return boosterCount;
+     }
+    
 
 function update() {
     game.world.setBounds(0, 0, 3000+bullet.x, 0); 
@@ -319,8 +337,7 @@ function update() {
    // game.physics.arcade.collide(bullet, trampolin, collectTrampolins);
     
     game.physics.arcade.overlap(bullet, beanbag, collectBags);
-    game.physics.arcade.overlap(bullet, trampolin, collectTrampolins);
-   
+    game.physics.arcade.overlap(bullet, trampolin, collectTrampolins);  
 
     
     bullet.angle += 1;
@@ -341,8 +358,10 @@ function update() {
 
     if(bullet.alive){
 
-        generateBooster();
+        
     }
+   
+    
 
     
   /*  if(beanbag.x < bullet.x + 600 || trampolin.x < bullet.x + 600 ){
@@ -357,10 +376,10 @@ function update() {
     }
 }
 
-function render() {
+/*function render() {
     
     game.debug.bodyInfo(bullet, 32, 64);
-}
+}*/
 
 
 
