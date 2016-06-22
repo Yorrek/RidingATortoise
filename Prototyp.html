@@ -113,24 +113,6 @@ function create() {
     //Die Beanbags (Hinderniss) werden erstellt und plaziert
 
 
-    /*beanbags = game.add.group();
-    beanbags.enableBody = true;
-    beanbags.physicsBodyType = Phaser.Physics.ARCADE;
- 
-    for (var i = 0; i < 6; i++ ){
-     var bean = beanbags.create(100+i*100, this.game.height - 120,'beanbag');
-        
-        bean.scale.x = 0.05;
-        bean.scale.y = 0.05;
-        
-    }*/
-
-    //var style = { font: "65px Arial", fill: "#ffffff", align: "center" };
-    
-    //var text = game.add.text(50, this.game.height - 64, bullet.position.x, style);
-    
-
-
 
     
 
@@ -227,23 +209,14 @@ function collectBooster (bullet, booster){
 
         boosters = game.add.group();
         boosters.enableBody = true;
-
-        var numBooster = game.rnd.integerInRange(300,500);
-    }  
-
         var numBooster = game.rnd.integerInRange(500, game.world.width);
 
-
-
-   
     for (var i = 1; i < 7; i++ ){
        
         if(boosterCount<1){
 
         var beanbag = boosters.create(i*numBooster, this.game.height - 150,'beanbag');
         beanbag.body.allowGravity = false;
-        boosterCount++;
-
             
             switch (x){
                 case 1: var beanbag = boosters.create(i*numBooster, this.game.height - 150,'beanbag');
@@ -253,15 +226,12 @@ function collectBooster (bullet, booster){
                         trampolin.body.allowGravity = false;
                         break;
             }
-                    boosterCount++;
-            //return boosterCount;
-
-            
+             boosterCount++;
+             return boosterCount;
+      
         }
-  
     }        
- 
-
+ }
 
      
      
@@ -294,7 +264,7 @@ function update() {
     this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun);
     if (bullet.x>600){bg.autoScroll(-bullet.body.velocity.x,0);}
 
-    if(!bullet.alive){
+    if(bullet.alive){
         generateBooster();
     }
  
