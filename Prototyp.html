@@ -16,6 +16,8 @@
 var game = new Phaser.Game(1280, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render  });
 
 var bullet;
+var beanbag;
+var trampolin;
 var powerBar;
 var powerTween;
 var bulletSpeed;
@@ -51,10 +53,10 @@ function create() {
     
     //Die Spielwelt grenzen werden erstellt und die Spielphysik(Arcade) aktiviert mistamt der Schwerkraft
 
-    game.world.setBounds(0, 0, 3840, 0);  
+    game.world.setBounds(0, 0, 3000, 0);  
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.physics.arcade.gravity.y = 500;
-    
+   
     //Der background wird ersellt und die Kamera wird auf ihn fixiert
     
     bg = game.add.tileSprite(0, 0, game.stage.bounds.width, 600, 'background');
@@ -73,6 +75,7 @@ function create() {
 
     this.gun2 = game.add.sprite(80, game.height - 110, 'canon_barrel');
     this.gun2.anchor.setTo(0.1, 0.5);
+
          
     //Der Boden wird erstellt und fixiert 
     groundBlock = this.game.add.sprite(0, this.game.height - 64, 'platform');
@@ -245,16 +248,18 @@ function schuss(){
 
     //Funktionen der Booster
 function collectTrampolins (bullet,trampolins){
-    trampolin.kill();
     boosterCount--;
-    bullet.body.acceleration =+ 400;
+    bullet.body.velocity.x += 200;
     return boosterCount;
 }
     
 function collectBags (bullet, trampolins){
-    beanbag.kill();
     boosterCount--;
-    bullet.body.acceleration = 0;
+    bullet.kill();
+    bullet = game.add.sprite(beanbag.x, beanbag.y, 'sloth');
+    game.world.bringToTop(bullet);
+    
+   
     return boosterCount;
     
 }
@@ -266,9 +271,15 @@ function collectBags (bullet, trampolins){
 
         bags = game.add.group();
         bags.enableBody = true;
+         bags.physicsBodyType = Phaser.Physics.ARCADE;
+         bags.checkWorldBounds = true;
+           bags.outOfBoundsKill=true;
      
         trampolins = game.add.group();
         trampolins.enableBody = true;
+         trampolins.physicsBodyType = Phaser.Physics.ARCADE;
+        trampolins.checkWorldBounds = true;
+        trampolins.outOfBoundsKill=true;
      
         var numBooster = game.rnd.integerInRange(500, game.world.width);
          
@@ -277,12 +288,17 @@ function collectBags (bullet, trampolins){
         if(boosterCount<1){
 
             switch (x){
-                case 1: var beanbag = bags.create(i*numBooster, this.game.height - 150,'beanbag');
+                case 1: beanbag = bags.create(i*numBooster, this.game.height - 150,'beanbag');
                         beanbag.body.allowGravity = false;
+                         beanbag.body.immovable = true;
+                        
                         break;
-                case 2: var trampolin = trampolins.create(i*numBooster, this.game.height - 125,'trampolin')
+                    
+                case 2: trampolin = trampolins.create(i*numBooster, this.game.height - 125,'trampolin')
                         trampolin.body.allowGravity = false;
+                        trampolin.body.immovable = true;
                         break;
+                    
             }
             boosterCount++;
             return boosterCount;
@@ -291,16 +307,18 @@ function collectBags (bullet, trampolins){
  }
 
 function update() {
-    game.world.setBounds(0, 0, 3840+bullet.x, 0); 
+    game.world.setBounds(0, 0, 3000+bullet.x, 0); 
      
     text.setText('Distanz: ' + Math.round(bullet.x/10));
     //scoreText = game.add.text(50, this.game.height - 64, 'Score : ' + score, { font: '40px Arial', fill: '#fff' });
     
     //Collisionhandling für Boden ,Booster und Hindernisse
     game.physics.arcade.collide(bullet, groundBlock, bodenBeruehren);
-                                                                
-    game.physics.arcade.overlap(bullet, generateBooster.bags, collectBags);
-    game.physics.arcade.overlap(bullet, generateBooster.trampolins, collectTrampolins);
+   // game.physics.arcade.collide(bullet, beanbag, collectBags);
+   // game.physics.arcade.collide(bullet, trampolin, collectTrampolins);
+    
+    game.physics.arcade.overlap(bullet, beanbag, collectBags);
+    game.physics.arcade.overlap(bullet, trampolin, collectTrampolins);
     game.physics.arcade.collide(bullet, generateBooster.boosters, overlapBeanbag);
 
     
@@ -309,9 +327,12 @@ function update() {
     this.game.world.bringToTop(this.gun);
 
     this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun);
-    if (bullet.x>600){bg.autoScroll(-bullet.body.velocity.x,0);}
-
-
+    
+    if (bullet.x>600){
+        bg.autoScroll(-bullet.body.velocity.x,0);
+        
+     }
+   
     
   
 
@@ -321,6 +342,10 @@ function update() {
 
         generateBooster();
     }
+
+    
+  
+
     if(bullet.body.x > 100){
         game.input.onUp.add(clickBoost, this);
     }
