@@ -33,12 +33,12 @@ function preload() {
      game.load.image('sloth', 'assets/objects/sloth.png');
      game.load.image('star', 'assets/star.png');
      game.load.image('beanbag', 'assets/objects/beanbag/beanbag_red_small.png');
-<<<<<<< HEAD
+
      game.load.audio('explosion', 'assets/sounds/cannon.wav');
      game.load.audio('musik', 'assets/sounds/music.mp3');
-=======
+
      game.load.image('trampolin', 'assets/objects/Trampoline/trampoline.png');
->>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
+
 
 
 }
@@ -50,7 +50,7 @@ function create() {
 
     game.world.setBounds(0, 0, 3840, 0);  
     game.physics.startSystem(Phaser.Physics.ARCADE);
-    this.GRAVITY = 600;
+    game.physics.arcade.gravity.y = 500;
     
     //Der background wird ersellt und die Kamera wird auf ihn fixiert
     
@@ -61,17 +61,17 @@ function create() {
     music = game.add.audio('musik');
     esound = game.add.audio('explosion');
 
-    music.play();     
+       
 
     
 
-<<<<<<< HEAD
-=======
+
+
 
     this.GRAVITY = 300;
 
 
->>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
+
     game.physics.arcade.gravity.y = this.GRAVITY;
     
     //Die kanone wird erstellt und plaziert
@@ -112,8 +112,8 @@ function create() {
     
     //Die Beanbags (Hinderniss) werden erstellt und plaziert
 
-<<<<<<< HEAD
-    beanbags = game.add.group();
+
+    /*beanbags = game.add.group();
     beanbags.enableBody = true;
     beanbags.physicsBodyType = Phaser.Physics.ARCADE;
  
@@ -123,39 +123,33 @@ function create() {
         bean.scale.x = 0.05;
         bean.scale.y = 0.05;
         
-    }
+    }*/
 
-    var style = { font: "65px Arial", fill: "#ffffff", align: "center" };
+    //var style = { font: "65px Arial", fill: "#ffffff", align: "center" };
     
-    var text = game.add.text(50, this.game.height - 64, bullet.position.x, style);
+    //var text = game.add.text(50, this.game.height - 64, bullet.position.x, style);
+    
 
-=======
+
 
     
->>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
+
     
-    text.fixedToCamera = true
+    
     
     game.input.onDown.add(vorSchuss, this);
     
     
     //me.timer = game.time.events.loop(2000, me.addPlatform, me);
 
-<<<<<<< HEAD
- 
-=======
 
->>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
+ 
+
+
+
 }
  
 
-
-
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
 
 function bodenBeruehren() {
 
@@ -213,6 +207,7 @@ function schuss(){
           bullet.body.velocity.x += -bulletSpeed*2;
           bullet.body.velocity.y += bulletSpeed*2;
           esound.play();
+          music.play(); 
           game.input.onUp.remove(schuss, this);
 
           }
@@ -232,23 +227,23 @@ function collectBooster (bullet, booster){
 
         boosters = game.add.group();
         boosters.enableBody = true;
-<<<<<<< HEAD
+
         var numBooster = game.rnd.integerInRange(300,500);
     }  
-=======
+
         var numBooster = game.rnd.integerInRange(500, game.world.width);
->>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
+
 
 
    
     for (var i = 1; i < 7; i++ ){
        
         if(boosterCount<1){
-<<<<<<< HEAD
+
         var beanbag = boosters.create(i*numBooster, this.game.height - 150,'beanbag');
         beanbag.body.allowGravity = false;
         boosterCount++;
-=======
+
             
             switch (x){
                 case 1: var beanbag = boosters.create(i*numBooster, this.game.height - 150,'beanbag');
@@ -259,8 +254,8 @@ function collectBooster (bullet, booster){
                         break;
             }
                     boosterCount++;
-            return boosterCount;
->>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
+            //return boosterCount;
+
             
         }
   
@@ -272,28 +267,30 @@ function collectBooster (bullet, booster){
      
 
 function update() {
-    
+    score=bullet.position.x;
+    scoreString = 'Score : ';
+    scoreText = game.add.text(50, this.game.height - 64, scoreString + score, { font: '34px Arial', fill: '#fff' });
+    scoreText.fixedToCamera = true;
     //Collisionhandling für Boden ,Booster und Hindernisse
    
     game.physics.arcade.collide(bullet, groundBlock, bodenBeruehren);
-<<<<<<< HEAD
 
     //game.physics.arcade.collide(generateBooster.boosters, groundBlock);
     
 
     //game.physics.arcade.overlap(bullet, generateBooster.boosters, collectBooster);
-    game.physics.arcade.collide(bullet, beanbags, overlapBeanbag);
-=======
+    //game.physics.arcade.collide(bullet, beanbags, overlapBeanbag);
+
     game.physics.arcade.collide(generateBooster.boosters, groundBlock);
     
     game.physics.arcade.overlap(bullet, generateBooster.boosters, collectBooster);
     game.physics.arcade.collide(bullet,generateBooster.boosters, overlapBeanbag);
->>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
+
     
     bullet.angle += 1;
 
     this.game.world.bringToTop(this.gun);
-<<<<<<< HEAD
+
     this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun);
     if (bullet.x>600){bg.autoScroll(-bullet.body.velocity.x,0);}
 
@@ -302,19 +299,19 @@ function update() {
     }
  
     /*if (bullet.alive){
-=======
+
     this.gun2.rotation = this.game.physics.arcade.angleToPointer(this.gun2);
     if (bullet.x>600){
         bg.autoScroll(-bullet.body.velocity.x,0);
     }
     
 
->>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
+
 
     if(bullet.alive){
 
         generateBooster();
-<<<<<<< HEAD
+
         }
     }*/
 
@@ -324,17 +321,16 @@ function update() {
     //    generateBooster();   
     //}
   
-=======
+
     }
-}
+
 
    //game.world.wrap(sloth, 0, true, true, true);
->>>>>>> 39e005435fb8f0b0aa55d202cc34ed40a7d6ac6d
+
 
     //if (bullet.checkWorldBounds = true){
     //bg.reset(this.bg.x, this.bg.y);
-    //groundBlock.reset(this.groundBlock.x, this.groundBlock.y);
-}
+    //groundBlock.reset(this.groundBlock.x, this.groundBlock.y);}
 
 
 function render() {
